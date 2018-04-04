@@ -1,0 +1,91 @@
+context Range::Range(int left, int right)
+  -- Initialize a Range Object, using 'left' and 'right' as the left and right
+  -- boundary of the range, respective.
+  pre: true
+       true
+  post: self.getLeft() = left
+        self.getRight() = right
+        true
+
+context Range::equals(Range r):boolean
+  -- Do 'this' and 'r' denote equivalent ranges?
+  -- result = (S<this> = S<r>)
+  pre: r <> null
+  post: (self.isEmpty() <> r.isEmpty()) implies (result = false)
+        (self.isEmpty() and r.isEmpty()) implies (result = true)
+        (not self.isEmpty() and not r.isEmpty()) implies (result = ((self.getRight() = r.getRight()) and (self.getLeft() = r.getLeft())))
+
+context Range::isEmpty():boolean
+  -- Is 'this' an empty range?
+  -- result = (S<this> = zero)
+  pre: true
+       true
+       true
+  post: result = self.getLeft() > self.getRight()
+        true
+        true
+
+context Range::leftOverlaps(Range r):boolean
+  -- Does 'this' overlap with 'r' on the left end?
+  -- result = ((getLeft() inside S<this>) and (getRight inside S<r>))
+  pre: r <> null
+       true
+       true
+  post: self.isEmpty() or r.isEmpty() implies result = false
+        not self.isEmpty() and not r.isEmpty() implies result = (r.getLeft() <= self.getLeft() and self.getLeft() <= r.getRight())
+        true
+
+context Range::rightOverlaps(Range r):boolean
+  -- Does 'this' overlap with 'r' on the right end?
+  -- result = ((getRight() inside S<this>) and (getRight() inside S<r>))
+  pre: r <> null
+       true
+       true
+  post: self.isEmpty() or r.isEmpty() implies result = false
+        not self.isEmpty() and not r.isEmpty() implies result = (r.getLeft() <= self.getRight() and self.getRight() <= r.getRight())
+        true
+
+context Range::isSubRangeOf(Range r):boolean
+  -- Are all integers in 'this' also in 'r'?
+  -- result = (S<this> (_ S<r>)
+  pre: r <> null
+       true
+       true
+  post: self.isEmpty() implies result = true
+        not self.isEmpty() and r.isEmpty() implies result = false
+        not self.isEmpty() and not r.isEmpty() implies result = (self.getLeft() >= r.getLeft() and self.getLeft() <= r.getRight() and self.getRight() <= r.getRight() and self.getRight() >= r.getLeft())
+
+context Range::isSuperRangeOf(Range r):boolean
+  -- Are all integers in 'r' also in 'this'?
+  -- result = (S<this> )_ S<r>)
+  pre: r <> null
+       true
+       true
+  post: result = r.isSubRangeOf(this)
+        true
+        true
+
+context Range::overlaps(Range r):boolean
+  -- Does 'this' share any integer with 'r'?
+  -- result ((S<this> and S<r>) <> zero)
+  pre: r <> null
+       true
+       true
+  post: self.isEmpty() or r.isEmpty() implies result = false
+        not self.isEmpty() and not r.isEmpty() implies result = (r.isSubRangeOf(this) or this.isSubRangeOf(r))
+        true
+        true
+
+context Range::merge(Range r):Range
+  -- Merge 'this' and 'r', return the merged range.
+  -- S<result> = S<this> or S<r>
+  pre: r <> null
+       true
+       true
+  post: r.isEmpty() and self.isEmpty() implies result.isEmpty()
+        r.isEmpty() and not self.isEmpty() implies result.equals(self)
+        not r.isEmpty() and self.isEmpty() implies result.equals(r)
+        not r.isEmpty() and not self.isEmpty() implies result.getLeft() = (if this.getLeft() < r.getLeft() then this.getLeft() else r.getLeft() endif)
+        not r.isEmpty() and not self.isEmpty() implies result.getRight() = (if this.getRight() > r.getRight() then this.getRight() else r.getRight() endif)
+        result.isSuperRangeOf(this)
+        result.isSuperRangeOf(r)

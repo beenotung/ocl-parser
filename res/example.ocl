@@ -1,0 +1,40 @@
+-- based on https://formal.iti.kit.edu/~beckert/teaching/Verification-SS06/10OCL.pdf
+
+context Vehicle
+inv: self. owner. age >= 18
+
+context Person
+inv: self.fleet->size <= 3
+-- fleet is collection, size is available in collection
+
+context Person
+inv: self.fleet->forAll(v | v.color = #black)
+-- color is enum, black is one of the option
+
+context Person
+inv: self.fleet->select(v | v.color = #black)->size <= 3
+
+-- iterate (reduce)
+context Person
+inv: self.fleet->iterate(v; acc:Integer=0
+                        | if (v.color=#black)
+                        then acc + 1 else acc endif) <=3
+
+-- logics
+context Person
+inv: age<18 implies self.fleet->forAll(v | not v.oclIsKindOf(Car))
+-- 'ocl is kind of' check if the abstract Vehicle is implemented as Car (instanceof)
+
+context Car
+inv: Car.allInstances()->exists(c | c.color=#red)
+
+context Person::setAge(newAge:int)
+pre: newAge >= 0
+post: self.age = newAge
+
+context Person::birthday()
+post: self.age = self.age@pre + 1
+
+context Range::isEmpty():boolean
+pre: true
+post: result = self.getLeft() > self.getRight()

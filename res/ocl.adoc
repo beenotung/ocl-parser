@@ -1,0 +1,48 @@
+reference: https://st.inf.tu-dresden.de/files/general/OCLByExampleLecture.pdf
+
+== Invariant
+
+context <classifier>
+inv [<constraint name>]: <Boolean OCL expression>
+
+== Pre-Condition
+
+context <classifier>::<operation> (<parameters>)
+pre [<constraint name]>: <Boolean OCL expression>
+
+== Post-Condition
+
+context <classifier>::<operation> (<parameters>)
+post [<constraint name]>: <Boolean OCL expression>
+
+with `result` and `@pre`
+`^` specify the communication has taken place
+Example:
+```
+context Subject::hasChanged()
+post: observer^update(2,4)
+```
+
+== OCL Expression
+
+. Boolean expressions
+. Standard library of primitive types and operations
+  i) Basic Types
+    1. Boolean
+    2. Integer
+    3. Real
+    4. String
+  ii) Collection Types
+    1. Collection
+    2. Set
+    3. Ordered Set
+    4. Bag
+    5. Sequence
+. User Defined Types (OCLType)
+  i) Class Type (Model Type)
+    1. Attributes (start)
+    2. Operations (duration())
+    3. Class attributes (Date::today)
+    4. Class Operations
+    5. Association ends (,,navigation expression'')
+  ii) Enum Type (Gender, Gender::male)
