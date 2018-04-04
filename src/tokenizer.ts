@@ -98,13 +98,9 @@ export function tokenize(s: string, offset: number = 0): Observable<Token> {
                     }
                 } else {
                     /* symbol keyword */
-                    // let c = s[offset + x.length];
-                    // console.log(`match symbol keyword: \`${x}\`, next is \`${c}\``);
-                    // if (c >= s.length || isAlphabet(c) || isWhiteSpace(c) || isLineBreak(c)) {
-                        offset += x.length;
-                        subject.next({keyword: x});
-                        return setTimeout(next);
-                    // }
+                    offset += x.length;
+                    subject.next({keyword: x});
+                    return setTimeout(next);
                 }
             }
         }
