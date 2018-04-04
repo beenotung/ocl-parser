@@ -8,5 +8,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "BSD-2-Clause"
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "@types/node": "^9.6.2"
+  },
+  "dependencies": {
+    "@beenotung/tslib": "^11.10.0",
+    "rxjs": "^5.5.8"
+  }
 }
