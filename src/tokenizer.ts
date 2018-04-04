@@ -70,9 +70,9 @@ export function tokenize(s: string, offset: number = 0): Observable<Token> {
         /* check comment */
         if (c == '-' && s[offset + 1] == '-') {
             offset += 2;
-            let end = s.indexOf('\n', offset);
+            let end = s.indexOf('\r', offset);
             if (end == -1) {
-                end = s.indexOf('\r', offset);
+                end = s.indexOf('\n', offset);
                 if (end == -1) {
                     end = s.length;
                 }
